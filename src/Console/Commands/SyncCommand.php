@@ -20,6 +20,7 @@ class SyncCommand extends Command
             ->setDescription('Sync a MySQL table to BigQuery')
             ->setHelp('This commands syncs data between a MySQL table and BigQuery')
             ->addArgument('table-name', InputArgument::REQUIRED, 'The name of the table you want to sync')
+            ->addOption('bigquery-dataset-name', null, InputOption::VALUE_OPTIONAL, 'BigQuery dataset name')
             ->addOption('create-table', 'c', InputOption::VALUE_NONE, 'If BigQuery table doesn\'t exist, create it')
             ->addOption('delete-table', 'd', InputOption::VALUE_NONE, 'Delete the BigQuery table before syncing')
             ->addOption(
@@ -69,6 +70,8 @@ class SyncCommand extends Command
             $bigQueryTableName = $input->getArgument('table-name');
         }
 
+        $bigQueryDatasetName = $input->getOption('bigquery-dataset-name');
+
         $service = $container->get('MysqlToGoogleBigQuery\Services\SyncService');
         $service->execute(
             $databaseName,
@@ -78,7 +81,8 @@ class SyncCommand extends Command
             $input->getOption('delete-table'),
             $orderColumn,
             $ignoreColumns,
-            $output
+            $output,
+            $bigQueryDatasetName
         );
     }
 }

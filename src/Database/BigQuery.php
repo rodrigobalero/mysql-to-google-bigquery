@@ -15,7 +15,7 @@ class BigQuery
      * @param  array  $mysqlTableColumns   Array of Doctrine\DBAL\Schema\Column
      * @return Google\Cloud\BigQuery\Table Table object
      */
-    public function createTable($tableName, $mysqlTableColumns)
+    public function createTable($bigQueryDatasetName, $tableName, $mysqlTableColumns)
     {
         $bigQueryColumns = [];
 
@@ -80,7 +80,7 @@ class BigQuery
         }
 
         $client = $this->getClient();
-        $dataset = $client->dataset($_ENV['BQ_DATASET']);
+        $dataset = $client->dataset($bigQueryDatasetName);
 
         return $dataset->createTable($tableName, [
             'schema' => [
@@ -93,10 +93,10 @@ class BigQuery
      * Delete a BigQuery Table
      * @param  string $tableName Table Name
      */
-    public function deleteTable(string $tableName)
+    public function deleteTable(string $bigQueryDatasetName, string $tableName)
     {
         $client = $this->getClient();
-        $dataset = $client->dataset($_ENV['BQ_DATASET']);
+        $dataset = $client->dataset($bigQueryDatasetName);
         $dataset->table($tableName)->delete();
     }
 
@@ -105,9 +105,9 @@ class BigQuery
      * @param  string $tableName Table name
      * @return int|bool          false if table doesn't exists, or the number of rows
      */
-    public function getCountTableRows(string $tableName)
+    public function getCountTableRows(string $bigQueryDatasetName, string $tableName)
     {
-        $this->getTablesMetadata();
+        $this->getTablesMetadata($bigQueryDatasetName);
 
         if (! array_key_exists($tableName, $this->tablesMetadata)) {
             return false;
@@ -122,12 +122,12 @@ class BigQuery
      * @param  string $columnName   Column name
      * @return string               Max value
      */
-    public function getMaxColumnValue(string $tableName, string $columnName)
+    public function getMaxColumnValue(string $bigQueryDatasetName, string $tableName, string $columnName)
     {
         $client = $this->getClient();
 
         $result = $client->runQuery(
-            'SELECT MAX([' . $columnName . ']) AS columnMax FROM [' . $_ENV['BQ_DATASET'] . '.' .  $tableName . ']'
+            'SELECT MAX([' . $columnName . ']) AS columnMax FROM [' . $bigQueryDatasetName . '.' .  $tableName . ']'
         );
 
         $isComplete = $result->isComplete();
@@ -151,7 +151,7 @@ class BigQuery
      * @param  string $columnValue  Value to be deleted
      * @return string               Result
      */
-    public function deleteColumnValue(string $tableName, string $columnName, string $columnValue)
+    public function deleteColumnValue(string $bigQueryDatasetName, string $tableName, string $columnName, string $columnValue)
     {
         $client = $this->getClient();
 
@@ -161,7 +161,7 @@ class BigQuery
         }
 
         $result = $client->runQuery(
-            'DELETE FROM `' . $_ENV['BQ_DATASET'] . '.' .  $tableName . '`' .
+            'DELETE FROM `' . $bigQueryDatasetName . '.' .  $tableName . '`' .
             ' WHERE `' . $columnName .'` = ' . $columnValue,
             ['useLegacySql' => false]
         );
@@ -210,10 +210,10 @@ class BigQuery
      *
      * @return array Array with all dataset tables information
      */
-    public function getTablesMetadata()
+    public function getTablesMetadata(string $bigQueryDatasetName)
     {
         $client = $this->getClient();
-        $queryResults = $client->runQuery('SELECT * FROM ' . $_ENV['BQ_DATASET'] . '.__TABLES__;', [
+        $queryResults = $client->runQuery('SELECT * FROM ' . $bigQueryDatasetName . '.__TABLES__;', [
             'useQueryCache' => false
         ]);
 
@@ -230,10 +230,10 @@ class BigQuery
      * @param  string          $tableName           Table Name
      * @return Google\Cloud\BigQuery\Job            BigQuery Data Load Job
      */
-    public function loadFromJson($file, $tableName)
+    public function loadFromJson($file, $bigQueryDatasetName, $tableName)
     {
         $client = $this->getClient();
-        $dataset = $client->dataset($_ENV['BQ_DATASET']);
+        $dataset = $client->dataset($bigQueryDatasetName);
         $table = $dataset->table($tableName);
 
         $job = $table->load(
@@ -253,10 +253,10 @@ class BigQuery
      * @param  string $tableName Table name
      * @return bool              True if table exists
      */
-    public function tableExists(string $tableName)
+    public function tableExists(string $bigQueryDatasetName, string $tableName)
     {
         $client = $this->getClient();
-        $dataset = $client->dataset($_ENV['BQ_DATASET']);
+        $dataset = $client->dataset($bigQueryDatasetName);
 
         return $dataset->table($tableName)->exists();
     }

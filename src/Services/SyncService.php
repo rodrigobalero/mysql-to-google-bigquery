@@ -51,31 +51,32 @@ class SyncService
         bool $deleteTable,
         $orderColumn,
         array $ignoreColumns,
-        OutputInterface $output
+        OutputInterface $output,
+        string $bigQueryDatasetName
     ) {
         if ($deleteTable) {
             // Delete the BigQuery Table before any operation
-            if ($this->bigQuery->tableExists($bigQueryTableName)) {
-                $this->bigQuery->deleteTable($bigQueryTableName);
+            if ($this->bigQuery->tableExists($bigQueryDatasetName, $bigQueryTableName)) {
+                $this->bigQuery->deleteTable($bigQueryDatasetName, $bigQueryTableName);
             }
 
             // Create the table after deleting
             $createTable = true;
         }
 
-        if (!$this->bigQuery->tableExists($bigQueryTableName)) {
+        if (!$this->bigQuery->tableExists($bigQueryDatasetName, $bigQueryTableName)) {
             if (!$createTable) {
                 throw new \Exception('BigQuery table ' . $bigQueryTableName . ' not found');
             }
 
-            $this->createTable($databaseName, $tableName, $bigQueryTableName);
+            $this->createTable($databaseName, $tableName, $bigQueryTableName, $bigQueryDatasetName);
         }
 
         if ($orderColumn) {
             $output->writeln('<fg=green>Using order column "' . $orderColumn . '"</>');
 
             $mysqlMaxColumnValue = $this->mysql->getMaxColumnValue($databaseName, $tableName, $orderColumn);
-            $bigQueryMaxColumnValue = $this->bigQuery->getMaxColumnValue($bigQueryTableName, $orderColumn);
+            $bigQueryMaxColumnValue = $this->bigQuery->getMaxColumnValue($bigQueryDatasetName, $bigQueryTableName, $orderColumn);
 
             if (strcmp($mysqlMaxColumnValue, $bigQueryMaxColumnValue) === 0) {
                 $output->writeln('<fg=green>Already synced!</>');
@@ -93,12 +94,12 @@ class SyncService
                     '<fg=yellow>Cleaning "' . $bigQueryTableName . '" for "' .
                     $orderColumn . '" = "' . $bigQueryMaxColumnValue . '"</>'
                 );
-                $this->bigQuery->deleteColumnValue($bigQueryTableName, $orderColumn, $bigQueryMaxColumnValue);
+                $this->bigQuery->deleteColumnValue($bigQueryDatasetName, $bigQueryTableName, $orderColumn, $bigQueryMaxColumnValue);
 
                 /**
                  * Now get the latest "real" value
                  */
-                $bigQueryMaxColumnValue = $this->bigQuery->getMaxColumnValue($bigQueryTableName, $orderColumn);
+                $bigQueryMaxColumnValue = $this->bigQuery->getMaxColumnValue($bigQueryDatasetName, $bigQueryTableName, $orderColumn);
                 $output->writeln('<fg=green>Syncing from "' . $bigQueryMaxColumnValue . '"</>');
             } else {
                 $bigQueryMaxColumnValue = false;
@@ -108,7 +109,7 @@ class SyncService
         }
 
         $mysqlCountTableRows = $this->mysql->getCountTableRows($databaseName, $tableName, $orderColumn, $bigQueryMaxColumnValue);
-        $bigQueryCountTableRows = $orderColumn ? 0 : $this->bigQuery->getCountTableRows($bigQueryTableName, $orderColumn);
+        $bigQueryCountTableRows = $orderColumn ? 0 : $this->bigQuery->getCountTableRows($bigQueryDatasetName, $bigQueryTableName, $orderColumn);
 
         $rowsDiff = $mysqlCountTableRows - $bigQueryCountTableRows;
 
@@ -136,7 +137,8 @@ class SyncService
                 $ignoreColumns,
                 $offset,
                 $maxRowsPerBatch,
-                $bigQueryMaxColumnValue
+                $bigQueryMaxColumnValue,
+                $bigQueryDatasetName
             );
             $progress->advance();
         }
@@ -162,7 +164,8 @@ class SyncService
         array $ignoreColumns,
         int $offset,
         int $limit,
-        $orderColumnOffset
+        $orderColumnOffset,
+        $bigQueryDatasetName
     ) {
         $mysqlConnection = $this->mysql->getConnection($databaseName);
         $mysqlPlatform = $mysqlConnection->getDatabasePlatform();
@@ -232,7 +235,7 @@ class SyncService
         }
 
         // Send JSON to BigQuery
-        $job = $this->bigQuery->loadFromJson($json, $bigQueryTableName);
+        $job = $this->bigQuery->loadFromJson($json, $bigQueryDatasetName, $bigQueryTableName);
 
         // This is the first job, waits for a first success to continue
         if (! $this->currentJob) {

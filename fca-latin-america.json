@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "fca-latin-america",
+  "private_key_id": "8453881b98c2a90d336cacd06e8a77d57ab94c8f",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC62rSDpIKViwT6\nSsLpX0jk3YRPGKtDEA4JzszuSfhPwh1ForYUxqhipEaofG4uG5SvBNQMq5Lsdkc+\nJu3PauzG7HXNE9Pb2N6SbY0sc31Rk1+/lBYOSnWXPctWucYdhEkNJYg8siyHPlNX\nr/jpUjYHGWEUN2MBoPeRoq4x+4OYUlvY0RsoDp9nDGUkHAuZdwEv759RgRQgoLjY\nFnaDN0n0uowLKlDWUIjYbWaTrhAKFGJVa/dEEyRTQUnX9QoOy8ALtdF/DNcQxVNl\nkQZBBmIKVVXYo3Mqz0nNWRf+dIo+BEflhkX0t5ig1DTx8yEkKg8eMP5jTBD4AHAR\n3L+YMrC9AgMBAAECggEAATOGwDyT2leadewlH1BNglXU6UKaAe8IfWem9Evlch3S\nslqUG8NrMbcnUnik/LGQsySveFAMvG3GPNAN7KzIo5QW7cqYLMGoLKjST4bZN2e1\n0IrTLs8BEofYgXuQRSr54pZrLyNgxeh7VgT7mgRn9IO6lravHEOR/o2yhlUSSNhm\niAQnyw+4xq3LnjNyYBeLuhHxiWozsN09IHMuPXa4uP/Ck8Y2lBivot1Li4QX6jml\nkdq5RmozGzBX883RUN31bID/tBJ80ZAx7ywboM1pvPjXnrlIwOpvHSLQPUYSUXig\n57LBmL4Mc4V7nwhKEz+5P7Pu3Y9U9NSkpPS3FTMcwQKBgQD692FFqZF4DPFdbFmu\nDzSUB95LV5+IZlQhwP0sW8LXqd21+Kk7+9EsSZXrdAqJYwWtAnr88EmcMerxevWK\nwtgrcfHr4nVDpRriqQ6a8UdNJ5ZrbKZtTQYq/V17/RH264Anf2eKDsjxNWENMvgW\ni0jU7vpfse6mL7/IQ3XG/zJt1wKBgQC+miItdq6rkHEg1X327ysK9aKUXa90zS1n\n4xBdNKSJJU2zhQ/avcegElOWLNIMiPGrGG8Tjz7i1LWm2xzKoKU5/Y8c3BIsgOxd\nrX8Y74TUPycP84pNcOmB6Lxk3SVA95ybVu71uMfaUFnAi/86rNmiOqWqv2wXPY8m\n1a1ttnO7iwKBgAadBDwwtruiI64hj89taSZJessjePnAMJFfI4zKsjy6pjQIZHVH\nMoDnQ4Mb4Lc0G88uVI1by6TJD/bjFZtdfRLQAt8DbbGlpSq557+fghB/bZBRIaWZ\ntQLnAFKnHZUTKaJg0hqqPxNUI8WURUNa0kWCMqjY6IAKnBQr6uueh/arAoGBAJ6r\nNzp7q0rdUp/Pui3/yeg0teQm3XIxf9QU3UGKGlKlQDrq0Vj6VZ12xCinJTEUK4KQ\nM5+nxuUTyCigDSbNdt6Aq0uOFH8B0ELntH9wnTYHYKBR0FdJYMopkfOxeVrNBoz2\nYLUj3xNpgl3c7VrOG9qGUfWDpxrtvybICLjlgxCjAoGALEvpd+Yyd76wSm1N5VgV\n+hCqRk4tEteYTRCTlnisszyVqJE71QghJoIkRdvxOjvlndE8Tymjp2WH1U9xIkyE\nJB1OFgwF2jpAhN5a24rijkxRYo95oMh2heWSkqLn2Eek1xB0sU12kVBlYcTPRhiK\nU4/ZLZ7v66flnbAgh4RP1Rs=\n-----END PRIVATE KEY-----\n",
+  "client_email": "calamar-bigquery@fca-latin-america.iam.gserviceaccount.com",
+  "client_id": "104959071354861165057",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/calamar-bigquery%40fca-latin-america.iam.gserviceaccount.com"
+}
