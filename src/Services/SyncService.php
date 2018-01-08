@@ -29,7 +29,7 @@ class SyncService
     protected function createTable(string $databaseName, string $tableName, string $bigQueryTableName)
     {
         $mysqlTableColumns = $this->mysql->getTableColumns($databaseName, $tableName);
-        $this->bigQuery->createTable($bigQueryTableName, $mysqlTableColumns);
+        $this->bigQuery->createTable($bigQueryDatasetName, $bigQueryTableName, $mysqlTableColumns);
     }
 
     /**
